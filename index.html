@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda — Axara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="home">
+
+  <div class="app-layout">
+    <aside class="sidebar-left" id="sidebarLeft"></aside>
+    <main class="main-content">
+      <div class="mobile-header" id="mobileHeader"></div>
+      <div class="desktop-header">
+        <span class="page-title">Beranda</span>
+        <a href="settings.html" class="avatar-btn" id="desktopAvatar">?</a>
+      </div>
+      <div class="composer" id="composerSection">
+        <div class="avatar" id="composerAvatar">?</div>
+        <div class="composer-body">
+          <textarea id="postInput" placeholder="Apa yang sedang terjadi?" maxlength="500"></textarea>
+          <div class="composer-footer">
+            <span class="char-counter" id="charCounter">0/500</span>
+            <button class="btn btn-primary" id="btnPost" disabled>Posting</button>
+          </div>
+        </div>
+      </div>
+      <div id="feed">
+        <div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>
+        <div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>
+      </div>
+    </main>
+    <aside class="sidebar-right">
+      <div class="side-card">
+        <h3>🔥 Trending</h3>
+        <div id="trendingList"></div>
+      </div>
+      <div class="side-card">
+        <h3>Tentang Axara</h3>
+        <p>Platform sosial media berbasis teks. Bicara bebas, terhubung nyata.</p>
+      </div>
+    </aside>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav"></nav>
+  <script src="script.js"></script>
+</body>
+</html>
