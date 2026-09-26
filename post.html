@@ -12,22 +12,35 @@
 </head>
 <body data-page="post">
 <div class="app-layout">
-<aside class="sidebar-left" id="sidebarLeft"></aside>
-<main class="main-content">
-<div class="mobile-header" id="mobileHeader"></div>
-<div class="desktop-header"><button class="btn btn-sm btn-outline" onclick="history.back()">← Kembali</button><a href="settings.html" class="avatar-btn" id="desktopAvatar">?</a></div>
-<div id="postDetail"></div>
-<div class="reply-composer" id="replyComposer">
-<div class="avatar" id="replyAvatar">?</div>
-<div class="composer-body">
-<textarea id="replyInput" placeholder="Tulis balasan..." maxlength="500"></textarea>
-<div class="composer-footer"><span class="char-counter" id="replyCharCounter">0/500</span><button class="btn btn-primary" id="btnReply" disabled>Balas</button></div>
+  <aside class="sidebar-left" id="sidebarLeft"></aside>
+  <main class="main-content">
+    <div class="mobile-header" id="mobileHeader"></div>
+    <div class="desktop-header">
+      <button class="btn btn-sm btn-outline" onclick="history.back()">← Kembali</button>
+      <a href="settings.html" class="avatar-btn" id="desktopAvatar">?</a>
+    </div>
+
+    <div id="postDetail"></div>
+
+    <div class="reply-composer" id="replyComposer">
+      <div class="avatar" id="replyAvatar">?</div>
+      <div class="composer-body">
+        <textarea id="replyInput" placeholder="Tulis balasan..." maxlength="500"></textarea>
+        <div class="composer-footer">
+          <span class="char-counter" id="replyCharCounter">0/500</span>
+          <button class="btn btn-primary" id="btnReply" disabled>Balas</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="repliesList"></div>
+  </main>
+
+  <aside class="sidebar-right">
+    <div class="side-card"><h3>💬 Diskusi</h3><p>Balas dengan sopan dan konstruktif.</p></div>
+  </aside>
 </div>
-</div>
-<div id="repliesList"></div>
-</main>
-<aside class="sidebar-right"><div class="side-card"><h3>💬 Diskusi</h3><p>Balas dengan sopan dan konstruktif.</p></div></aside>
-</div>
+
 <nav class="bottom-nav" id="bottomNav"></nav>
 <script src="script.js"></script>
 </body>
