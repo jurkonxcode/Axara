@@ -1,20 +1,20 @@
 // ============================================================
-// KONFIGURASI FIREBASE — GANTI DENGAN DATA ANDA!
-// Cara dapat: Firebase Console → Project Axara → Web App → Config
+// KONFIGURASI FIREBASE — sudah terisi
 // ============================================================
 const firebaseConfig = {
-  apiKey: "GANTI_DENGAN_API_KEY_ANDA",
-  authDomain: "GANTI_DENGAN_AUTH_DOMAIN.firebaseapp.com",
-  projectId: "GANTI_DENGAN_PROJECT_ID",
-  storageBucket: "GANTI_DENGAN_STORAGE_BUCKET",
-  messagingSenderId: "GANTI_DENGAN_SENDER_ID",
-  appId: "GANTI_DENGAN_APP_ID"
+  apiKey: "AIzaSyBbYYDPV8EsshS6koEvhNRshBSJZUhkXXg",
+  authDomain: "axara-c406d.firebaseapp.com",
+  projectId: "axara-c406d",
+  storageBucket: "axara-c406d.firebasestorage.app",
+  messagingSenderId: "926033991824",
+  appId: "1:926033991824:web:2faa43cf7bdd722cb1a015",
+  measurementId: "G-5ZTCWP9BES"
 };
 
-const configReady = firebaseConfig.apiKey !== "GANTI_DENGAN_API_KEY_ANDA";
-if (configReady && !firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const auth = configReady ? firebase.auth() : null;
-const db = configReady ? firebase.firestore() : null;
+// Inisialisasi Firebase
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 // ============================================================
 // STATE
@@ -37,7 +37,7 @@ function timeAgo(ts) {
   if (s < 3600) return Math.floor(s / 60) + 'm';
   if (s < 86400) return Math.floor(s / 3600) + 'j';
   if (s < 604800) return Math.floor(s / 86400) + 'h';
-  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined });
+  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
 }
 
 function escapeHtml(t) {
@@ -55,6 +55,7 @@ function linkify(text) {
 
 function getInitial(name) { return (name || '?').charAt(0).toUpperCase(); }
 function getHandle(email) { return '@' + (email || 'user').split('@')[0].toLowerCase(); }
+
 function colorForUid(uid) {
   if (!uid) return 0;
   let sum = 0;
@@ -79,8 +80,25 @@ function toast(msg, type = '') {
   }, 2500);
 }
 
+function translateError(code) {
+  const errors = {
+    'auth/invalid-email': 'Format email tidak valid.',
+    'auth/user-not-found': 'Akun tidak ditemukan.',
+    'auth/wrong-password': 'Kata sandi salah.',
+    'auth/invalid-credential': 'Email atau kata sandi salah.',
+    'auth/email-already-in-use': 'Email sudah terdaftar.',
+    'auth/weak-password': 'Kata sandi minimal 6 karakter.',
+    'auth/too-many-requests': 'Terlalu banyak percobaan.',
+    'auth/network-request-failed': 'Koneksi internet bermasalah.',
+    'auth/operation-not-allowed': 'Email/Password belum aktif di Firebase.',
+    'auth/unauthorized-domain': 'Domain belum didaftarkan di Firebase.',
+    'permission-denied': 'Akses database ditolak. Cek Firestore Rules.'
+  };
+  return errors[code] || code || 'Terjadi kesalahan.';
+}
+
 // ============================================================
-// KOMPONEN: SIDEBAR & BOTTOM NAV
+// KOMPONEN UI
 // ============================================================
 function renderSidebar() {
   const el = document.getElementById('sidebarLeft');
@@ -145,7 +163,7 @@ function renderBottomNav() {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg> Profil
     </a>
     <a href="settings.html" class="bottom-nav-item ${page === 'settings' ? 'active' : ''}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg> Pengaturan
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg> Atur
     </a>
   `;
 }
@@ -155,12 +173,12 @@ function updateUserUI() {
   const handle = currentUserData?.handle || getHandle(currentUser?.email);
   const initial = getInitial(name);
   const color = colorForUid(currentUser?.uid);
-  
+
   ['mobileAvatar', 'desktopAvatar', 'composerAvatar', 'replyAvatar', 'sidebarAvatar'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.textContent = initial; el.setAttribute('data-color', color); }
   });
-  
+
   const sn = document.getElementById('sidebarName');
   const sh = document.getElementById('sidebarHandle');
   if (sn) sn.textContent = name;
@@ -168,7 +186,7 @@ function updateUserUI() {
 }
 
 // ============================================================
-// KOMPONEN: POST CARD
+// POST CARD
 // ============================================================
 function renderPostCard(post, index = 0, showDelete = false) {
   const isLiked = currentUser && post.likes?.includes(currentUser.uid);
@@ -177,7 +195,7 @@ function renderPostCard(post, index = 0, showDelete = false) {
   const color = colorForUid(post.uid);
   const time = timeAgo(post.createdAt);
   const isOwner = currentUser && post.uid === currentUser.uid;
-  
+
   return `
     <article class="post-card" style="animation-delay: ${index * 0.03}s" data-post-id="${post.id}" onclick="if(event.target.closest('.action-btn'))return;window.location.href='post.html?id=${post.id}'">
       <div class="avatar" data-color="${color}">${initial}</div>
@@ -190,29 +208,20 @@ function renderPostCard(post, index = 0, showDelete = false) {
         <div class="post-content">${linkify(post.content)}</div>
         <div class="post-actions">
           <button class="action-btn like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}">
-            <svg viewBox="0 0 24 24" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <span>${post.likes?.length || 0}</span>
           </button>
           <button class="action-btn repost-btn ${isReposted ? 'reposted' : ''}" data-post-id="${post.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-              <path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
             <span>${post.reposts?.length || 0}</span>
           </button>
           <button class="action-btn reply-btn" data-post-id="${post.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>${post.replyCount || 0}</span>
           </button>
           ${(showDelete && isOwner) ? `
             <button class="action-btn delete delete-btn" data-post-id="${post.id}">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
             </button>` : ''}
         </div>
       </div>
@@ -224,44 +233,46 @@ function attachPostActions(container) {
   container.querySelectorAll('.like-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (!currentUser || !db) return;
-      const id = btn.dataset.postId;
-      const ref = db.collection('posts').doc(id);
+      if (!currentUser) return;
+      const ref = db.collection('posts').doc(btn.dataset.postId);
       try {
         const doc = await ref.get();
         const likes = doc.data().likes || [];
         const liked = likes.includes(currentUser.uid);
         await ref.update({
-          likes: liked ? firebase.firestore.FieldValue.arrayRemove(currentUser.uid) : firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+          likes: liked
+            ? firebase.firestore.FieldValue.arrayRemove(currentUser.uid)
+            : firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
         });
       } catch (err) { toast('Gagal: ' + err.message, 'error'); }
     });
   });
-  
+
   container.querySelectorAll('.repost-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (!currentUser || !db) return;
-      const id = btn.dataset.postId;
-      const ref = db.collection('posts').doc(id);
+      if (!currentUser) return;
+      const ref = db.collection('posts').doc(btn.dataset.postId);
       try {
         const doc = await ref.get();
         const reposts = doc.data().reposts || [];
         const reposted = reposts.includes(currentUser.uid);
         await ref.update({
-          reposts: reposted ? firebase.firestore.FieldValue.arrayRemove(currentUser.uid) : firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+          reposts: reposted
+            ? firebase.firestore.FieldValue.arrayRemove(currentUser.uid)
+            : firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
         });
       } catch (err) { toast('Gagal: ' + err.message, 'error'); }
     });
   });
-  
+
   container.querySelectorAll('.reply-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       window.location.href = 'post.html?id=' + btn.dataset.postId;
     });
   });
-  
+
   container.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -304,9 +315,6 @@ function initHomePage() {
         likes: [], reposts: [], parentId: '', replyCount: 0,
         hashtags: extractHashtags(content)
       });
-      await db.collection('users').doc(currentUser.uid).update({
-        postCount: firebase.firestore.FieldValue.increment(1)
-      }).catch(() => {});
       input.value = '';
       counter.textContent = '0/500';
       counter.className = 'char-counter';
@@ -314,11 +322,6 @@ function initHomePage() {
     } catch (err) { toast('Gagal: ' + err.message, 'error'); }
     finally { btn.textContent = 'Posting'; btn.disabled = true; }
   });
-
-  if (!db) {
-    feed.innerHTML = `<div class="empty-state"><span class="emoji">⚠️</span><h3>Firebase belum dikonfigurasi</h3></div>`;
-    return;
-  }
 
   feedUnsubscribe = db.collection('posts').orderBy('createdAt', 'desc').limit(50).onSnapshot(snap => {
     const posts = [];
@@ -362,7 +365,6 @@ async function initExplorePage() {
   const content = document.getElementById('exploreContent');
   const tabs = document.querySelectorAll('.profile-tab');
 
-  // Cek query parameter
   const params = new URLSearchParams(window.location.search);
   const q = params.get('q');
   if (q) input.value = q;
@@ -382,9 +384,8 @@ async function initExplorePage() {
 
   async function doSearch(query) {
     if (!query) { showTrending(); return; }
-    
+
     if (exploreTab === 'trending') {
-      // Trending = cari postingan dengan hashtag
       const tag = query.replace('#', '').toLowerCase();
       content.innerHTML = `<div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>`;
       try {
@@ -402,7 +403,7 @@ async function initExplorePage() {
       } catch (err) { content.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
       return;
     }
-    
+
     if (exploreTab === 'users') {
       content.innerHTML = `<div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>`;
       try {
@@ -415,12 +416,12 @@ async function initExplorePage() {
             users.push({ id: d.id, ...data });
           }
         });
-        if (users.length === 0) content.innerHTML = `<div class="empty-state"><span class="emoji">👥</span><h3>Tidak ada pengguna</h3><p>Coba kata kunci lain.</p></div>`;
+        if (users.length === 0) content.innerHTML = `<div class="empty-state"><span class="emoji">👥</span><h3>Tidak ada pengguna</h3></div>`;
         else content.innerHTML = users.map(u => renderUserCard(u)).join('');
       } catch (err) { content.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
       return;
     }
-    
+
     if (exploreTab === 'posts') {
       content.innerHTML = `<div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>`;
       try {
@@ -431,7 +432,7 @@ async function initExplorePage() {
           const data = d.data();
           if (!data.parentId && (data.content || '').toLowerCase().includes(q2)) posts.push({ id: d.id, ...data });
         });
-        if (posts.length === 0) content.innerHTML = `<div class="empty-state"><span class="emoji">📝</span><h3>Tidak ada postingan</h3><p>Coba kata kunci lain.</p></div>`;
+        if (posts.length === 0) content.innerHTML = `<div class="empty-state"><span class="emoji">📝</span><h3>Tidak ada postingan</h3></div>`;
         else {
           content.innerHTML = posts.map((p, i) => renderPostCard(p, i)).join('');
           attachPostActions(content);
@@ -447,16 +448,16 @@ async function initExplorePage() {
       const snap = await db.collection('posts').orderBy('createdAt', 'desc').limit(100).get();
       const posts = [];
       snap.forEach(d => { const data = d.data(); if (!data.parentId) posts.push({ id: d.id, ...data }); });
-      
+
       const counts = {};
       posts.forEach(p => (p.hashtags || []).forEach(t => counts[t] = (counts[t] || 0) + 1));
       const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 20);
-      
+
       if (sorted.length === 0) {
         content.innerHTML = `<div class="empty-state"><span class="emoji">🔥</span><h3>Belum ada trending</h3><p>Mulai posting dengan #hashtag untuk memulai!</p></div>`;
         return;
       }
-      
+
       content.innerHTML = `<div style="padding: 20px;">${sorted.map(([tag, count], i) => `
         <div class="trend-item" onclick="document.getElementById('searchInput').value='#${tag}';document.getElementById('searchInput').dispatchEvent(new Event('input'));">
           <div class="trend-rank">#${i + 1} Trending</div>
@@ -492,10 +493,9 @@ async function initProfilePage() {
   const params = new URLSearchParams(window.location.search);
   viewingUid = params.get('uid') || currentUser.uid;
   const isOwn = viewingUid === currentUser.uid;
-  
+
   document.getElementById('pageTitle').textContent = isOwn ? 'Profil Saya' : 'Profil';
 
-  // Load user data
   let userData;
   try {
     const doc = await db.collection('users').doc(viewingUid).get();
@@ -509,27 +509,24 @@ async function initProfilePage() {
     return;
   }
 
-  // Update header
   document.getElementById('profileAvatar').textContent = getInitial(userData.displayName);
   document.getElementById('profileAvatar').setAttribute('data-color', colorForUid(viewingUid));
   document.getElementById('profileName').textContent = userData.displayName || 'Tanpa Nama';
   document.getElementById('profileHandle').textContent = userData.handle || '@user';
   document.getElementById('profileBio').textContent = userData.bio || '';
   document.getElementById('profileBio').style.display = userData.bio ? 'block' : 'none';
-  
+
   const meta = [];
   if (userData.location) meta.push(`📍 ${escapeHtml(userData.location)}`);
   if (userData.website) meta.push(`🔗 ${escapeHtml(userData.website)}`);
   if (userData.createdAt) meta.push(`📅 Bergabung ${timeAgo(userData.createdAt)}`);
   document.getElementById('profileMeta').innerHTML = meta.map(m => `<span>${m}</span>`).join('');
 
-  // Stats
   const followers = userData.followers || [];
   const following = userData.following || [];
   document.getElementById('statFollowers').textContent = followers.length;
   document.getElementById('statFollowing').textContent = following.length;
 
-  // Action button
   const actionEl = document.getElementById('profileActionBtn');
   if (isOwn) {
     actionEl.innerHTML = `<a href="settings.html" class="btn btn-outline btn-sm">Edit Profil</a>`;
@@ -556,7 +553,6 @@ async function initProfilePage() {
     });
   }
 
-  // Tabs
   const tabs = document.querySelectorAll('.profile-tab');
   tabs.forEach(t => t.addEventListener('click', () => {
     tabs.forEach(x => x.classList.remove('active'));
@@ -568,9 +564,8 @@ async function initProfilePage() {
     if (profileUnsubscribe) profileUnsubscribe();
     const feedEl = document.getElementById('profileFeed');
     feedEl.innerHTML = `<div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>`;
-    
+
     if (tab === 'likes') {
-      // Posts yang di-like user ini (client-side filter karena Firestore array-contains)
       db.collection('posts').orderBy('createdAt', 'desc').limit(100).onSnapshot(snap => {
         const posts = [];
         snap.forEach(d => {
@@ -605,10 +600,6 @@ async function initProfilePage() {
   loadFeed('posts');
 }
 
-async function showFollowModal(type) {
-  toast('Fitur daftar ' + type + ' akan datang', '');
-}
-
 // ============================================================
 // HALAMAN: POST DETAIL
 // ============================================================
@@ -616,14 +607,13 @@ async function initPostPage() {
   const params = new URLSearchParams(window.location.search);
   const postId = params.get('id');
   if (!postId) { window.location.href = 'index.html'; return; }
-  
+
   const detailEl = document.getElementById('postDetail');
   const repliesEl = document.getElementById('repliesList');
   const replyInput = document.getElementById('replyInput');
   const replyCounter = document.getElementById('replyCharCounter');
   const btnReply = document.getElementById('btnReply');
-  
-  // Load post
+
   db.collection('posts').doc(postId).onSnapshot(doc => {
     if (!doc.exists) {
       detailEl.innerHTML = `<div class="empty-state"><span class="emoji">❌</span><h3>Postingan tidak ditemukan</h3></div>`;
@@ -634,7 +624,7 @@ async function initPostPage() {
     const isReposted = currentUser && post.reposts?.includes(currentUser.uid);
     const color = colorForUid(post.uid);
     const initial = getInitial(post.displayName);
-    
+
     detailEl.innerHTML = `
       <div class="post-detail">
         <div class="avatar" data-color="${color}">${initial}</div>
@@ -663,16 +653,14 @@ async function initPostPage() {
     `;
     attachPostActions(detailEl);
   });
-  
-  // Reply counter
+
   replyInput.addEventListener('input', () => {
     const len = replyInput.value.length;
     replyCounter.textContent = `${len}/500`;
     replyCounter.className = 'char-counter' + (len > 450 ? ' warn' : '');
     btnReply.disabled = len === 0;
   });
-  
-  // Send reply
+
   btnReply.addEventListener('click', async () => {
     const content = replyInput.value.trim();
     if (!content) return;
@@ -696,8 +684,7 @@ async function initPostPage() {
     } catch (err) { toast('Gagal: ' + err.message, 'error'); }
     finally { btnReply.textContent = 'Balas'; btnReply.disabled = true; }
   });
-  
-  // Load replies
+
   db.collection('posts').where('parentId', '==', postId).orderBy('createdAt', 'asc').limit(100)
     .onSnapshot(snap => {
       const replies = [];
@@ -716,8 +703,7 @@ async function initPostPage() {
 // ============================================================
 function initSettingsPage() {
   const editModal = document.getElementById('editProfileModal');
-  
-  // Edit Profil
+
   document.getElementById('itemEditProfile').addEventListener('click', () => {
     document.getElementById('editName').value = currentUserData?.displayName || '';
     document.getElementById('editBio').value = currentUserData?.bio || '';
@@ -725,23 +711,23 @@ function initSettingsPage() {
     document.getElementById('editWebsite').value = currentUserData?.website || '';
     editModal.classList.add('active');
   });
-  
+
   document.querySelectorAll('[data-close]').forEach(el => {
     el.addEventListener('click', () => document.getElementById(el.dataset.close).classList.remove('active'));
   });
-  
+
   editModal.addEventListener('click', (e) => {
     if (e.target === editModal) editModal.classList.remove('active');
   });
-  
+
   document.getElementById('btnSaveProfile').addEventListener('click', async () => {
     const name = document.getElementById('editName').value.trim();
     const bio = document.getElementById('editBio').value.trim();
     const location = document.getElementById('editLocation').value.trim();
     const website = document.getElementById('editWebsite').value.trim();
-    
+
     if (name.length < 2) { toast('Nama minimal 2 karakter', 'error'); return; }
-    
+
     const btn = document.getElementById('btnSaveProfile');
     btn.disabled = true; btn.textContent = 'Menyimpan...';
     try {
@@ -754,8 +740,7 @@ function initSettingsPage() {
     } catch (err) { toast('Gagal: ' + err.message, 'error'); }
     finally { btn.textContent = 'Simpan'; btn.disabled = false; }
   });
-  
-  // Ganti password
+
   document.getElementById('itemChangePassword').addEventListener('click', async () => {
     if (!confirm(`Kirim email reset kata sandi ke ${currentUser.email}?`)) return;
     try {
@@ -763,41 +748,20 @@ function initSettingsPage() {
       toast('Email reset terkirim. Cek inbox Anda.', 'success');
     } catch (err) { toast('Gagal: ' + err.message, 'error'); }
   });
-  
-  // Logout
+
   document.getElementById('itemLogout').addEventListener('click', async () => {
     if (!confirm('Keluar dari akun?')) return;
     await auth.signOut();
     window.location.href = 'login.html';
   });
-  
+
   document.getElementById('itemTheme').addEventListener('click', () => {
     toast('Fitur tema akan datang', '');
   });
 }
 
 // ============================================================
-// TRANSLATE ERROR
-// ============================================================
-function translateError(code) {
-  const errors = {
-    'auth/invalid-email': 'Format email tidak valid.',
-    'auth/user-not-found': 'Akun tidak ditemukan.',
-    'auth/wrong-password': 'Kata sandi salah.',
-    'auth/invalid-credential': 'Email atau kata sandi salah.',
-    'auth/email-already-in-use': 'Email sudah terdaftar.',
-    'auth/weak-password': 'Kata sandi minimal 6 karakter.',
-    'auth/too-many-requests': 'Terlalu banyak percobaan.',
-    'auth/network-request-failed': 'Koneksi internet bermasalah.',
-    'auth/operation-not-allowed': 'Email/Password belum aktif di Firebase.',
-    'auth/unauthorized-domain': 'Domain belum didaftarkan di Firebase.',
-    'permission-denied': 'Akses database ditolak. Cek Firestore Rules.'
-  };
-  return errors[code] || code || 'Terjadi kesalahan.';
-}
-
-// ============================================================
-// AUTH PAGES
+// AUTH: LOGIN & REGISTER
 // ============================================================
 function initLoginPage() {
   const form = document.getElementById('loginForm');
@@ -806,11 +770,11 @@ function initLoginPage() {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!auth) { message.textContent = '⚠️ Firebase belum dikonfigurasi.'; message.style.color = '#f43f5e'; return; }
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     btn.disabled = true; btn.textContent = 'Memproses...';
     message.textContent = 'Sedang masuk...';
+    message.style.color = '#8a8a94';
     try {
       await auth.signInWithEmailAndPassword(email, password);
       window.location.href = 'index.html';
@@ -829,12 +793,20 @@ function initRegisterPage() {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!auth || !db) { message.textContent = '⚠️ Firebase belum dikonfigurasi.'; message.style.color = '#f43f5e'; return; }
     const displayName = document.getElementById('displayName').value.trim();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    if (displayName.length < 2) { message.textContent = 'Nama minimal 2 karakter.'; message.style.color = '#f43f5e'; return; }
+
+    if (displayName.length < 2) {
+      message.textContent = 'Nama minimal 2 karakter.';
+      message.style.color = '#f43f5e';
+      return;
+    }
+
     btn.disabled = true; btn.textContent = 'Membuat akun...';
+    message.textContent = 'Memproses...';
+    message.style.color = '#8a8a94';
+
     try {
       const cred = await auth.createUserWithEmailAndPassword(email, password);
       await db.collection('users').doc(cred.user.uid).set({
@@ -863,28 +835,20 @@ function initRegisterPage() {
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
-
-  if (!auth) {
-    if (page === 'home' || page === 'profile' || page === 'explore' || page === 'post' || page === 'settings') {
-      renderSidebar(); renderMobileHeader(); renderBottomNav();
-      const target = document.getElementById('feed') || document.getElementById('exploreContent') || document.getElementById('profileFeed') || document.getElementById('postDetail');
-      if (target) target.innerHTML = `<div class="empty-state"><span class="emoji">⚠️</span><h3>Firebase belum dikonfigurasi</h3><p>Isi firebaseConfig di script.js</p></div>`;
-    }
-    if (page === 'login') initLoginPage();
-    if (page === 'register') initRegisterPage();
-    return;
-  }
+  const publicPages = ['login', 'register'];
 
   auth.onAuthStateChanged(async (user) => {
-    const publicPages = ['login', 'register'];
-    
     if (user) {
       currentUser = user;
       try {
         const doc = await db.collection('users').doc(user.uid).get();
-        currentUserData = doc.exists ? doc.data() : { displayName: user.email, handle: getHandle(user.email) };
-      } catch { currentUserData = { displayName: user.email, handle: getHandle(user.email) }; }
-      
+        currentUserData = doc.exists
+          ? doc.data()
+          : { displayName: user.email, handle: getHandle(user.email) };
+      } catch {
+        currentUserData = { displayName: user.email, handle: getHandle(user.email) };
+      }
+
       if (publicPages.includes(page)) { window.location.href = 'index.html'; return; }
     } else {
       currentUser = null; currentUserData = null;
