@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postingan — Axara</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="post">
+
+  <div class="app-layout">
+    <aside class="sidebar-left" id="sidebarLeft"></aside>
+    <main class="main-content">
+      <div class="mobile-header" id="mobileHeader"></div>
+      <div class="desktop-header">
+        <button class="btn btn-sm btn-outline" onclick="history.back()">← Kembali</button>
+        <a href="settings.html" class="avatar-btn" id="desktopAvatar">?</a>
+      </div>
+      <div id="postDetail"></div>
+      <div class="reply-composer" id="replyComposer">
+        <div class="avatar" id="replyAvatar">?</div>
+        <div class="composer-body">
+          <textarea id="replyInput" placeholder="Tulis balasan..." maxlength="500"></textarea>
+          <div class="composer-footer">
+            <span class="char-counter" id="replyCharCounter">0/500</span>
+            <button class="btn btn-primary" id="btnReply" disabled>Balas</button>
+          </div>
+        </div>
+      </div>
+      <div id="repliesList"></div>
+    </main>
+    <aside class="sidebar-right">
+      <div class="side-card">
+        <h3>💬 Diskusi</h3>
+        <p>Balas dengan sopan dan konstruktif. Jaga komunitas tetap sehat!</p>
+      </div>
+    </aside>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav"></nav>
+  <script src="script.js"></script>
+</body>
+</html>
