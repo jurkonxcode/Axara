@@ -1,58 +1,45 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil — Axara</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — Axara</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body data-page="profile">
-
-  <div class="app-layout">
-    <aside class="sidebar-left" id="sidebarLeft"></aside>
-    <main class="main-content">
-      <div class="mobile-header" id="mobileHeader"></div>
-      <div class="desktop-header">
-        <span class="page-title" id="pageTitle">Profil</span>
-        <a href="settings.html" class="avatar-btn" id="desktopAvatar">?</a>
-      </div>
-      <div class="profile-cover"></div>
-      <div class="profile-header-info">
-        <div class="profile-avatar-wrap">
-          <div class="avatar lg" id="profileAvatar">?</div>
-          <div id="profileActionBtn"></div>
-        </div>
-        <h1 class="profile-name" id="profileName">Memuat...</h1>
-        <p class="profile-handle" id="profileHandle">@memuat</p>
-        <p class="profile-bio" id="profileBio"></p>
-        <div class="profile-meta" id="profileMeta"></div>
-        <div class="profile-stats">
-          <div onclick="showFollowModal('following')"><strong id="statFollowing">0</strong> <span>Mengikuti</span></div>
-          <div onclick="showFollowModal('followers')"><strong id="statFollowers">0</strong> <span>Pengikut</span></div>
-          <div><strong id="statPosts">0</strong> <span>Postingan</span></div>
-        </div>
-      </div>
-      <div class="profile-tabs">
-        <button class="profile-tab active" data-tab="posts">Postingan</button>
-        <button class="profile-tab" data-tab="likes">Suka</button>
-      </div>
-      <div id="profileFeed">
-        <div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>
-      </div>
-    </main>
-    <aside class="sidebar-right">
-      <div class="side-card">
-        <h3>💡 Info</h3>
-        <p>Klik postingan untuk membalas. Klik ❤️ untuk menyukai. Klik ikon 🔁 untuk membagikan ulang.</p>
-      </div>
-    </aside>
-  </div>
-
-  <nav class="bottom-nav" id="bottomNav"></nav>
-  <script src="script.js"></script>
+<div class="app-layout">
+<aside class="sidebar-left" id="sidebarLeft"></aside>
+<main class="main-content">
+<div class="mobile-header" id="mobileHeader"></div>
+<div class="desktop-header"><span class="page-title" id="pageTitle">Profil</span><a href="settings.html" class="avatar-btn" id="desktopAvatar">?</a></div>
+<div class="profile-cover"></div>
+<div class="profile-header-info">
+<div class="profile-avatar-wrap"><div class="avatar lg" id="profileAvatar">?</div><div id="profileActionBtn"></div></div>
+<h1 class="profile-name" id="profileName">Memuat...</h1>
+<p class="profile-handle" id="profileHandle">@memuat</p>
+<p class="profile-bio" id="profileBio"></p>
+<div class="profile-meta" id="profileMeta"></div>
+<div class="profile-stats">
+<div><strong id="statFollowing">0</strong> <span>Mengikuti</span></div>
+<div><strong id="statFollowers">0</strong> <span>Pengikut</span></div>
+<div><strong id="statPosts">0</strong> <span>Postingan</span></div>
+</div>
+</div>
+<div class="profile-tabs">
+<button class="profile-tab active" data-tab="posts">Postingan</button>
+<button class="profile-tab" data-tab="likes">Suka</button>
+</div>
+<div id="profileFeed">
+<div class="skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>
+</div>
+</main>
+<aside class="sidebar-right"><div class="side-card"><h3>💡 Info</h3><p>Klik postingan untuk membalas. Klik ❤️ untuk menyukai.</p></div></aside>
+</div>
+<nav class="bottom-nav" id="bottomNav"></nav>
+<script src="script.js"></script>
 </body>
 </html>
